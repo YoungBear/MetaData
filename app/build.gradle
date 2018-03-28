@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+// 加载配置文件
+Properties props = new Properties()
+FileInputStream fis = new FileInputStream(file("config.properties"))
+BufferedReader bf = new BufferedReader(new InputStreamReader(fis, "UTF-8"))
+props.load(bf)
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -10,10 +16,46 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    // 签名配置
+    signingConfigs {
+        debug {
+            storeFile file(props['DEBUG_STORE_FILE'])
+            storePassword props['DEBUG_STORE_PASSWORD']
+            keyAlias props['DEBUG_KEY_ALIAS']
+            keyPassword props['DEBUG_KEY_PASSWORD']
+        }
         release {
-            minifyEnabled false
+            storeFile file(props['RELEASE_STORE_FILE'])
+            storePassword props['RELEASE_STORE_PASSWORD']
+            keyAlias props['RELEASE_KEY_ALIAS']
+            keyPassword props['RELEASE_KEY_PASSWORD']
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false  //不启用Proguard混淆
+            shrinkResources false //是否清理无用资源,依赖于minifyEnabled
+            zipAlignEnabled false //是否启用zipAlign压缩
+            signingConfig signingConfigs.debug
+            debuggable true
+            manifestPlaceholders = [
+                    SERVICE_ID: props['SERVICE_ID_DEBUG']
+            ]
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true //是否清理无用资源,依赖于minifyEnabled
+            zipAlignEnabled true //是否启用zipAlign压缩
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [
+                    SERVICE_ID: props['SERVICE_ID_RELEASE']
+            ]
         }
     }
 }

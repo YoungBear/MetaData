@@ -41,6 +41,11 @@
             android:name="long_value"
             android:value="L12345678901" />
 
+        <meta-data
+            android:name="SERVICE_ID"
+            android:value="${SERVICE_ID}" />
+
+
     </application>
 
 </manifest>

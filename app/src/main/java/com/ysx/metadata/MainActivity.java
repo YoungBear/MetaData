@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         final String KEY_COLOR = "color_value";
         final String KEY_FLOAT = "float_value";
         final String KEY_LONG = "long_value";
+        final String KEY_SERVICE_ID = "SERVICE_ID";
 
 
         try {
@@ -51,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
             String tmpStr = metaData.getString(KEY_LONG);
             long aLong = Long.parseLong(tmpStr.substring(1));
 
-
+            String tmpStrId = metaData.getString(KEY_SERVICE_ID);
+            long serviceId = Long.parseLong(tmpStrId.substring(1));
 
             StringBuilder sb = new StringBuilder();
             sb
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     .append("\n" + "aColor: " + aColor)
                     .append("\n" + "aLong: " + aLong)
                     .append("\n" + "aFloat: " + aFloat)
+                    .append("\n" + "serviceId: " + serviceId)
 
             ;
 
