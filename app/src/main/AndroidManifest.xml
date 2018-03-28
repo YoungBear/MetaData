@@ -16,6 +16,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="string_value"
+            android:value="thisisstringvalue" />
+
+        <meta-data
+            android:name="int_value"
+            android:value="123456" />
+
+        <meta-data
+            android:name="boolean_value"
+            android:value="true" />
+
+        <meta-data
+            android:name="color_value"
+            android:value="#ff0000" />
+
+        <meta-data
+            android:name="float_value"
+            android:value="1.23" />
+
+        <meta-data
+            android:name="long_value"
+            android:value="L12345678901" />
+
     </application>
 
 </manifest>
