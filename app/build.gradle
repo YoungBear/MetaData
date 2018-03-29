@@ -7,13 +7,14 @@ BufferedReader bf = new BufferedReader(new InputStreamReader(fis, "UTF-8"))
 props.load(bf)
 
 android {
-    compileSdkVersion 27
+
+    compileSdkVersion cfg.compileSdkVersion
     defaultConfig {
         applicationId "com.ysx.metadata"
-        minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion cfg.minSdkVersion
+        targetSdkVersion cfg.targetSdkVersion
+        versionCode cfg.versionCode
+        versionName cfg.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,16 +59,48 @@ android {
             ]
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName
+            if ("release" == variant.buildType.name) {
+                fileName = "meta_data_${variant.buildType.name}_${defaultConfig.versionName}_${getTime()}.apk"
+            } else {
+                fileName = "meta_data${variant.buildType.name}_${defaultConfig.versionName}.apk"
+            }
+
+            outputFileName = fileName
+        }
+    }
+
+    productFlavors {
+    }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    // support
+    implementation "com.android.support:appcompat-v7:${libs.support}"
+
+    // constraint-layout
+    implementation "com.android.support.constraint:constraint-layout:${libs.constraint}"
+
+    // 单元测试
+    testImplementation "junit:junit:${libs.junit}"
+    androidTestImplementation "com.android.support.test:runner:${libs.runner}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${libs.espresso}"
+
+    // 第三方开源库
+    implementation "com.jakewharton:butterknife:${libs.butterknife}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${libs.butterknife}"
+
+}
+
+def static getTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getDefault())
 }
